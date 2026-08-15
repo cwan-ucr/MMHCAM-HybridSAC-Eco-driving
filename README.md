@@ -223,4 +223,4 @@ Model checkpoints, training logs, raw evaluation results, and temporary generate
 
 ## License
 
-Before publishing this repository, add a license file such as MIT, BSD-3-Clause, Apache-2.0, or another license approved by your institution or collaborators.
+MIT License
