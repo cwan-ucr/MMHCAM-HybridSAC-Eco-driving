@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<additional>
+    <tlLogic id="joinedS_12637736322_cluster_12634769864_12634769869_12637736321_1333487013_#3more" type="static" programID="pm2026" offset="0">
+        <phase duration="17.2" state="rrrrrrrrrrrrrGGGrrrrrr" />
+        <phase duration="4.8" state="rrrrrrrrrrrrryyyrrrrrr" />
+        <phase duration="68" state="rrrrrrrrrrrrrrrrrrrrrr" />
+    </tlLogic>
+</additional>

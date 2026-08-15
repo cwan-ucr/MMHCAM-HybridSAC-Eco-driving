@@ -1,0 +1,36 @@
+<routes>
+    <!-- ═══ Vehicle Types ═══ -->
+    <vType id="hdv" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5"
+           minGap="2.0" maxSpeed="18.00" color="1,1,0" lcKeepRight="0"
+           speedFactor="1.0"/>
+
+    <vType id="cav" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5"
+           minGap="2.0" maxSpeed="18.00" color="0,1,0" lcKeepRight="0"
+           speedFactor="1.0"/>
+
+    <!-- ═══ Routes (straight-through only) ═══ -->
+    <route id="north_south" edges="north_in south_out"/>
+    <route id="south_north" edges="south_in north_out"/>
+    <route id="east_west"   edges="east_in west_out"/>
+    <route id="west_east"   edges="west_in east_out"/>
+
+    <!-- ═══ HDV Flows ═══ -->
+    <!-- <flow id="hdv_ns" type="hdv" route="north_south" begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/>
+    <flow id="hdv_sn" type="hdv" route="south_north" begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/>
+    <flow id="hdv_ew" type="hdv" route="east_west"   begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/> -->
+    <flow id="hdv_we" type="hdv" route="west_east"   begin="0" end="240"
+          vehsPerHour="1800" departLane="random" departSpeed="10"/>
+
+    <!-- ═══ CAV Flows ═══ -->
+    <!-- <flow id="cav_ns" type="cav" route="north_south" begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/>
+    <flow id="cav_sn" type="cav" route="south_north" begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/>
+    <flow id="cav_ew" type="cav" route="east_west"   begin="0" end="3600"
+          vehsPerHour="1" departLane="best" departSpeed="max"/> -->
+    <flow id="cav_we" type="cav" route="west_east"   begin="0" end="240"
+          vehsPerHour="600" departLane="random" departSpeed="10"/>
+</routes>

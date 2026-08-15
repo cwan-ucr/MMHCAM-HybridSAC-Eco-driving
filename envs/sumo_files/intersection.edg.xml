@@ -1,0 +1,23 @@
+<edges>
+    <!--
+        Each leg has 3 incoming lanes (toward intersection) and 3 outgoing lanes.
+        SUMO lane indexing: 0 = rightmost, 1 = middle, 2 = leftmost.
+        Lane usage:
+            Lane 0 = right turn + straight (shared)
+            Lane 1 = straight + right (shared)
+            Lane 2 = left turn (dedicated)
+        Speed 18.00 m/s ~ 40 mph/h
+    -->
+
+    <!-- Incoming (approach) edges -->
+    <edge id="north_in" from="north" to="center" numLanes="3" speed="18.00"/>
+    <edge id="south_in" from="south" to="center" numLanes="3" speed="18.00"/>
+    <edge id="east_in"  from="east"  to="center" numLanes="3" speed="18.00"/>
+    <edge id="west_in"  from="west"  to="center" numLanes="3" speed="18.00"/>
+
+    <!-- Outgoing (departure) edges -->
+    <edge id="north_out" from="center" to="north" numLanes="3" speed="18.00"/>
+    <edge id="south_out" from="center" to="south" numLanes="3" speed="18.00"/>
+    <edge id="east_out"  from="center" to="east"  numLanes="3" speed="18.00"/>
+    <edge id="west_out"  from="center" to="west"  numLanes="3" speed="18.00"/>
+</edges>

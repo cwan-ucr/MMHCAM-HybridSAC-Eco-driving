@@ -1,0 +1,19 @@
+<configuration>
+    <input>
+        <net-file value="sycamore_synthetic_pm2026.net.xml"/>
+        <route-files value="sycamore_synthetic_pm2026.rou.xml"/>
+        <additional-files value="sycamore_synthetic_pm2026.tll.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="0.2"/>
+    </time>
+    <processing>
+        <!--
+        <collision.action value="warn"/>
+        <collision.mingap-factor value="0"/>
+        <lateral-resolution value="0.8"/>
+        -->
+    </processing>
+</configuration>

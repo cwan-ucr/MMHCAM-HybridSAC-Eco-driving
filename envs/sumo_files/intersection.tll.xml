@@ -1,0 +1,27 @@
+<additional>
+    <!--
+        2-phase fixed-time signal (straight only, no turning).
+
+        12 links:
+          N:[0,1,2]  S:[3,4,5]  E:[6,7,8]  W:[9,10,11]
+
+        Phase 1: N/S green, E/W red   → GGGGGGrrrrrr
+        Phase 2: E/W green, N/S red   → rrrrrrGGGGGG
+    -->
+
+    <tlLogic id="center" type="static" programID="fixed" offset="0">
+        <!--              N0 N1 N2 S0 S1 S2 E0 E1 E2 W0 W1 W2 -->
+
+        <!-- Phase 1: N/S straight green (30s) -->
+        <phase duration="27" state="GGGGGGrrrrrr"/>
+
+        <!-- Yellow clearance (4s) -->
+        <phase duration="3"  state="yyyyyyrrrrrr"/>
+
+        <!-- Phase 2: E/W straight green (30s) -->
+        <phase duration="27" state="rrrrrrGGGGGG"/>
+
+        <!-- Yellow clearance (4s) -->
+        <phase duration="3"  state="rrrrrryyyyyy"/>
+    </tlLogic>
+</additional>

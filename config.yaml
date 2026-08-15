@@ -1,0 +1,208 @@
+defaults:
+    - override hydra/launcher: submitit_local
+
+# ── Agent ───────────────────────────────────────────────────────────────
+agent: sac              # tdmpc2 | sac | ppo | dqn
+
+# ── Environment ─────────────────────────────────────────────────────────
+task: sumo-intersection
+obs: state
+episodic: true
+device: cpu
+sumo_env_impl: fast  # default | fast | rw
+sumo_cfg: null       # optional SUMO .sumocfg override for real-world OSM scenarios
+route_template: null # optional .rou.xml template override used for demand randomization
+controlled_edges: null # optional comma/space-separated edge ids controlled by RL
+allowed_control_lanes: null # rw only: optional edge:lane|lane map, e.g. edgeA:0|1|2;edgeB:1|2|3
+use_gui: false       # true launches SUMO-GUI through TraCI
+sumo_gui_delay_ms: 50
+sumo_max_steps: null
+visualize_keep_open: true
+visualize_print_every: 100
+
+# ── Evaluation ──────────────────────────────────────────────────────────
+checkpoint: ???
+init_checkpoint: null
+init_checkpoint_mode: full  # full | actor
+eval_episodes: 1
+eval_freq: 1500000
+eval_penetration_runs: 10
+rl_control: true
+sumo_default_cav_behavior: false
+
+# SUMO built-in GLOSA baseline. When enabled, only CAV vTypes are equipped
+# with SUMO's glosa device; HDVs remain unchanged.
+glosa_enabled: false
+glosa_range: 300.0
+glosa_min_speed: 3.0
+glosa_max_speedfactor: 1.0
+glosa_add_switchtime: 0.0
+glosa_override_safety: false
+glosa_ignore_cfmodel: false
+glosa_use_queue: false
+
+# ── Training ────────────────────────────────────────────────────────────
+steps: 600000
+batch_size: 256
+reward_coef: 0.1
+value_coef: 0.1
+termination_coef: 1
+consistency_coef: 20
+rho: 0.7
+lr: 3e-4
+enc_lr_scale: 0.3
+grad_clip_norm: 20
+tau: 0.005
+discount_denom: 5
+discount_min: 0.95
+discount_max: 0.99
+buffer_size: 1000_000
+exp_name: cav_control
+data_dir: ???
+
+# ── Planning (MPPI) ────────────────────────────────────────────────────
+mpc: true
+iterations: 10
+num_samples: 256
+num_elites: 32
+num_pi_trajs: 24
+horizon: 1
+min_std: 0.05
+max_std: 2
+temperature: 0.5
+
+# ── Actor ───────────────────────────────────────────────────────────────
+log_std_min: -10
+log_std_max: 2
+entropy_coef: 1e-4
+
+# ── Critic ──────────────────────────────────────────────────────────────
+num_bins: 101
+vmin: -10
+vmax: +10
+
+# ── Architecture ────────────────────────────────────────────────────────
+# Optional TD-MPC2 preset. Set to 1/5/19/48/317 to override the generic
+# enc_dim/mlp_dim/latent_dim values below. Keep null for manual dimensions.
+model_size: null
+num_enc_layers: 2
+enc_dim: 128
+num_channels: 32
+mlp_dim: 128
+latent_dim: 128
+task_dim: 0
+num_q: 5
+dropout: 0.2
+simnorm_dim: 8
+
+# SAC uses its own explicit names so architecture tuning is unambiguous.
+sac_hidden_dim: 128
+sac_feature_dim: 128
+# SAC-only hybrid action mode: acceleration stays continuous, lane change is
+# categorical with env encoding {-1:right, 0:keep, +1:left}.
+lane_action_discrete: true
+sac_target_entropy_acc: -0.98
+sac_target_entropy_lane: -0.98
+sac_log_freq: 50  # collect expensive SAC scalar logs every N gradient updates
+
+# PPO baseline: hybrid action policy with a Gaussian acceleration head and
+# a categorical 3-way lane-change head. Updates consume complete per-vehicle
+# trajectories collected by the shared online trainer.
+ppo_hidden_dim: 128
+ppo_feature_dim: 128
+ppo_clip_ratio: 0.2
+ppo_epochs: 10
+ppo_minibatch_size: 256
+ppo_min_trajectories: 16
+ppo_value_coef: 0.5
+ppo_entropy_coef: 1e-4
+
+# DQN baseline: 27 discrete joint actions = 3 lateral commands × 9 physical
+# acceleration bins [-5, -4, ..., 3] m/s^2.
+dqn_hidden_dim: 128
+dqn_feature_dim: 128
+dqn_epsilon_start: 1.0
+dqn_epsilon_end: 0.05
+dqn_epsilon_decay_steps: 100000
+dqn_tau: 0.005
+dqn_target_update_freq: 1
+
+# ── DTDE Multi-Vehicle (slot-free) ─────────────────────────────────────
+dtde: true
+obs_per_agent: 35   # 9 own + 18 neighbor + 6 signal([cur/opp G/Y, T_l, T'_l]) + 2 prev_action
+act_per_agent: 2
+# Shared attention-based encoder: each CAV attends to its own obs + K nearest neighbors' obs 
+attention: false
+attention_fusion_gate: false  # learnable gate on attention fused embedding: ego + gate * neighbor_attn
+communication: false       # false => AV setting: no V2X (disable ctx attention; keep 4 discrete G/Y flags, hide T_l/T'_l)
+sac_attention_include_self_token: true   # include ego token in SAC attention K/V
+attention_heads: 4
+context_size: 8         # K nearest neighbors each CAV attends to
+communication_range_m: 150.0  # only CAVs within this radius are eligible for KNN context
+comm_topology: full      # full | front_only
+randomize_demand: true
+total_flow_vph_min: 1800
+total_flow_vph_max: 2100
+cav_penetration_min: 0.05
+cav_penetration_max: 0.95
+control_start_distance_m: 0.0  # first 20m of incoming edges use SUMO default behavior
+post_out_eval_distance_m: 50.0
+control_area_length_m: 294.4
+max_speed_mps: 18.0
+terminal_cycle_s: 60.0
+terminal_green_start_s: 30.0
+terminal_green_end_s: 60.0
+sumo_lane_change_mode: 512  # 512: no autonomous lane change motives, keep safety-gap checks for TraCI commands
+sumo_lane_change_mode_release: 1621  # restore default SUMO lane-change behavior after leaving controlled in-edges
+# Cross-vehicle interaction during latent rollout (in addition to
+# the encoder's one-shot attention). When false, dynamics is pure single-agent
+# and the rollout matches the original Level 0 behaviour.
+use_interaction: true
+# During MPC imagination, roll neighbor latents forward with the shared
+# policy + dynamics at every rollout step (instead of keeping them frozen
+# at their t=0 encoding). Requires use_interaction=true. Training always
+# uses ground-truth ctx from the buffer regardless of this flag.
+roll_neighbors_in_mpc: false
+vid_cycle: 120           # signal cycle length in control steps (60s / 0.5s)
+max_controllable: 200    # safety cap on CAVs per step (OOM guard)
+# Cooperative reward shaping: r_t^i ← r_t^i + w · mean_k(r_t^{i,k})
+# where the K neighbors are the same K-NN used for attention context.
+# 0 = selfish (original behavior), 0.3-0.5 = moderate coupling.
+neighbor_reward_coef: 0.0
+# When true, only share reward with DOWNSTREAM neighbors — vehicles behind
+# or parallel to ego on the same edge. Preceding vehicles cannot be
+# influenced by ego's action, so their rewards would inject non-causal
+# noise. Set to false to reproduce the symmetric K-NN sharing baseline.
+neighbor_reward_directional: false
+
+# ── Logging ─────────────────────────────────────────────────────────────
+wandb_project: tdmpc2-cav
+wandb_entity: ???
+wandb_silent: false
+enable_wandb: false
+save_csv: true
+ts_plot_freq: 1     # plot time-space diagram every N episodes (0 = disabled)
+ts_view: west_to_east  # all | west_to_east | east_to_west
+ts_trajectory_style: step  # line | step
+plot_skip_initial_episodes: 5   # hide first N random-seeding episodes in training_curves.png
+
+# ── Misc ────────────────────────────────────────────────────────────────
+compile: false
+save_video: false
+save_agent: true
+checkpoint_freq: 100000  # save models/100000.pt, 200000.pt, ... during training
+seed: 1
+
+# ── Convenience (populated at runtime) ──────────────────────────────────
+work_dir: ???
+task_title: ???
+multitask: ???
+tasks: ???
+obs_shape: ???
+action_dim: ???
+episode_length: ???
+obs_shapes: ???
+action_dims: ???
+episode_lengths: ???
+seed_steps: ???
+bin_size: ???

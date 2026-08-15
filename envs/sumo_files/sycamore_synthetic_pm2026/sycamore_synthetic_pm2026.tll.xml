@@ -1,0 +1,27 @@
+<additional>
+    <!--
+        2-phase fixed-time signal (straight only, no turning).
+
+        12 links:
+          N:[0,1,2]  S:[3,4,5]  E:[6,7,8]  W:[9,10,11]
+
+        Sycamore/Central PM2026 EB through timing is mapped to the synthetic
+        west->east movement. The rest of the cycle is red because only this
+        movement is simulated in the real-parameter transfer experiment. The
+        remaining cycle is assigned to the cross-street green phase.
+    -->
+
+    <tlLogic id="center" type="static" programID="fixed" offset="0">
+        <!--              N0 N1 N2 S0 S1 S2 E0 E1 E2 W0 W1 W2 -->
+
+        <!-- Phase 1: E/W straight green, including west->east EB through. -->
+        <phase duration="17.2" state="rrrrrrGGGGGG"/>
+
+        <!-- Yellow clearance. -->
+        <phase duration="4.8"  state="rrrrrryyyyyy"/>
+
+        <!-- Remaining PM signal cycle. -->
+        <phase duration="63.2" state="GGGGGGrrrrrr"/>
+        <phase duration="4.8"  state="yyyyyyrrrrrr"/>
+    </tlLogic>
+</additional>

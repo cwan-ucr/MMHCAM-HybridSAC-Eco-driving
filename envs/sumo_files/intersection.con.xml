@@ -1,0 +1,33 @@
+<connections>
+    <!--
+        Simplified: all lanes are straight-through only, no turning.
+        Lane 0,1,2 on each approach go straight to the opposite leg.
+        12 total links (4 approaches × 3 lanes).
+
+        Link order:
+          North: [0] lane0→south [1] lane1→south [2] lane2→south
+          South: [3] lane0→north [4] lane1→north [5] lane2→north
+          East:  [6] lane0→west  [7] lane1→west  [8] lane2→west
+          West:  [9] lane0→east  [10] lane1→east [11] lane2→east
+    -->
+
+    <!-- NORTH → SOUTH -->
+    <connection from="north_in" to="south_out" fromLane="0" toLane="0"/>   <!-- link 0 -->
+    <connection from="north_in" to="south_out" fromLane="1" toLane="1"/>   <!-- link 1 -->
+    <connection from="north_in" to="south_out" fromLane="2" toLane="2"/>   <!-- link 2 -->
+
+    <!-- SOUTH → NORTH -->
+    <connection from="south_in" to="north_out" fromLane="0" toLane="0"/>   <!-- link 3 -->
+    <connection from="south_in" to="north_out" fromLane="1" toLane="1"/>   <!-- link 4 -->
+    <connection from="south_in" to="north_out" fromLane="2" toLane="2"/>   <!-- link 5 -->
+
+    <!-- EAST → WEST -->
+    <connection from="east_in" to="west_out" fromLane="0" toLane="0"/>     <!-- link 6 -->
+    <connection from="east_in" to="west_out" fromLane="1" toLane="1"/>     <!-- link 7 -->
+    <connection from="east_in" to="west_out" fromLane="2" toLane="2"/>     <!-- link 8 -->
+
+    <!-- WEST → EAST -->
+    <connection from="west_in" to="east_out" fromLane="0" toLane="0"/>     <!-- link 9 -->
+    <connection from="west_in" to="east_out" fromLane="1" toLane="1"/>     <!-- link 10 -->
+    <connection from="west_in" to="east_out" fromLane="2" toLane="2"/>     <!-- link 11 -->
+</connections>

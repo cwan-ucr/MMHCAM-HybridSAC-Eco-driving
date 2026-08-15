@@ -1,0 +1,17 @@
+<routes>
+    <vType id="hdv" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5"
+           minGap="2.0" maxSpeed="22.35" color="1,1,0" lcKeepRight="0"
+           speedFactor="1.0"/>
+
+    <vType id="cav" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5"
+           minGap="2.0" maxSpeed="22.35" color="0,1,0" lcKeepRight="0"
+           speedFactor="1.0"/>
+
+    <!-- Central Ave eastbound through movement represented on the synthetic west->east approach. -->
+    <route id="central_eb_through" edges="west_in east_out"/>
+
+    <flow id="hdv_central_eb" type="hdv" route="central_eb_through" begin="0" end="450"
+          vehsPerHour="369.5" departLane="random" departSpeed="10"/>
+    <flow id="cav_central_eb" type="cav" route="central_eb_through" begin="0" end="450"
+          vehsPerHour="369.5" departLane="random" departSpeed="10"/>
+</routes>

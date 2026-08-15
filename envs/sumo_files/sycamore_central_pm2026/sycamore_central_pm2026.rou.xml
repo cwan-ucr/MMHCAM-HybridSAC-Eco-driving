@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<routes>
+    <vType id="hdv" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5" minGap="2.0" maxSpeed="18.00" color="1,1,0" lcKeepRight="0" speedFactor="1.0" />
+    <vType id="cav" accel="3.0" decel="5.0" sigma="0.0" length="5.0" tau="1.5" minGap="2.0" maxSpeed="18.00" color="0,1,0" lcKeepRight="0" speedFactor="1.0" />
+    <route id="central_eb_through" edges="central_eb_source 474684013 474684008#0 -1366413658#1" />
+    <flow id="hdv_central_eb_lane0" type="hdv" vehsPerHour="123.166667" departLane="0" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+    <flow id="cav_central_eb_lane0" type="cav" vehsPerHour="123.166667" departLane="0" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+    <flow id="hdv_central_eb_lane1" type="hdv" vehsPerHour="123.166667" departLane="1" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+    <flow id="cav_central_eb_lane1" type="cav" vehsPerHour="123.166667" departLane="1" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+    <flow id="hdv_central_eb_lane2" type="hdv" vehsPerHour="123.166667" departLane="2" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+    <flow id="cav_central_eb_lane2" type="cav" vehsPerHour="123.166667" departLane="2" route="central_eb_through" begin="0" end="450" departSpeed="10" />
+</routes>

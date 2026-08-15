@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configuration>
+    <input>
+        <net-file value="sycamore_central_pm2026.net.xml" />
+        <route-files value="sycamore_central_pm2026.rou.xml" />
+        <additional-files value="sycamore_central_pm2026.tll.xml" />
+    </input>
+    <time>
+        <begin value="0" />
+        <end value="3600" />
+        <step-length value="0.2" />
+    </time>
+</configuration>

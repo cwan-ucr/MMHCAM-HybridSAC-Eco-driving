@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# macOS / editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Local AI/editor agent state
+.claude/
+.codex/
+.agents/
+
+# Hydra / experiment outputs
+outputs/
+multirun/
+logs/
+eval_results/
+wandb/
+
+# Large model artifacts
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Generated media and temporary plots
+*.mp4
+*.avi
+*.gif
+*.png
+*.pdf
+
+# SUMO runtime-generated files
+envs/sumo_files/generated_routes/
+*.rou.alt.xml
+tripinfo*.xml
+emissions*.xml
+fcd*.xml
+
+# Local environment files
+.env
+.venv/
+venv/

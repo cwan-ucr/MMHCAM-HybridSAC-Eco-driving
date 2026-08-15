@@ -1,0 +1,10 @@
+<nodes>
+    <!-- Center intersection node (traffic-light controlled) -->
+    <node id="center" x="0" y="0" type="traffic_light"/>
+
+    <!-- Leg endpoints -->
+    <node id="north" x="0"    y="300"  type="dead_end"/>
+    <node id="south" x="0"    y="-300" type="dead_end"/>
+    <node id="east"  x="300"  y="0"    type="dead_end"/>
+    <node id="west"  x="-300" y="0"    type="dead_end"/>
+</nodes>
