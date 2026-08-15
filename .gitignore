@@ -35,6 +35,8 @@ wandb/
 *.gif
 *.png
 *.pdf
+!figures/
+!figures/*.png
 
 # SUMO runtime-generated files
 envs/sumo_files/generated_routes/

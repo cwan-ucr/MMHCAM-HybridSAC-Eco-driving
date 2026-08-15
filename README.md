@@ -2,7 +2,7 @@
 
 This repository contains the reproducible code for SUMO-based connected and automated vehicle (CAV) eco-driving experiments in mixed traffic. It includes the reinforcement-learning agents, SUMO environments, training and evaluation entry points, and scenario configuration files.
 
-The repository is intentionally code-focused. It does not include manuscript files, generated figures, training logs, evaluation outputs, or model checkpoints.
+The repository is intentionally code-focused. It does not include manuscript source files, raw training logs, raw evaluation outputs, or model checkpoints. A small set of representative result figures is included in `figures/` to make the experiment behavior easier to understand.
 
 ## Contents
 
@@ -21,7 +21,46 @@ evaluate_glosa.py        SUMO GLOSA baseline evaluation
 evaluate_comm_sensitivity.py  Communication-capacity evaluation
 config.yaml              Hydra configuration
 environment.yaml         Conda environment specification
+figures/                 Representative training, evaluation, and trajectory results
 ```
+
+## Representative Results
+
+The main comparison considers three learned control settings:
+
+- `AV`: local perception only, without V2I signal timing or V2V CAV context.
+- `CAV-V2I`: local perception plus signal timing information.
+- `CAV-V2X`: local perception, signal timing, and neighboring-CAV communication.
+
+Across the evaluated scenarios, the communication-aware `CAV-V2X` policy gives the most balanced improvement among the learned policies. Averaged over the tested CAV penetration rates, its mixed-traffic performance improves relative to the SUMO baseline by approximately `0.7%` in travel-time saving, `56.8%` in stop-time saving, `1.1%` in speed improvement, `16.5%` in fuel saving, `37.5%` in jerk reduction, and `65.7%` in TET-rate reduction.
+
+Training reward comparison:
+
+![Communication training reward](figures/communication_training_reward.png)
+
+Training performance metrics:
+
+![Communication training metrics](figures/communication_training_metrics.png)
+
+Evaluation trajectories at 50% CAV penetration:
+
+![50 percent CAV penetration trajectories](figures/trajectory_50pr_comparison.png)
+
+Average savings by vehicle group:
+
+![Mean savings polar plot](figures/mean_savings_polar.png)
+
+Penetration sensitivity:
+
+![Penetration sensitivity](figures/penetration_sensitivity.png)
+
+The real-parameter Sycamore/Central scenario is used to test adaptation from a pretrained model. Pretraining improves early convergence and stabilizes several performance metrics compared with training from scratch.
+
+![Sycamore generalization training](figures/sycamore_generalization_training.png)
+
+Pretrained-policy trajectories under different penetration rates:
+
+![Sycamore pretrained trajectories](figures/sycamore_pretrained_trajectories.png)
 
 ## Setup
 
@@ -180,7 +219,7 @@ python evaluate.py checkpoint=<path/to/final.pt> \
 
 ## Large Files
 
-Model checkpoints, training logs, raw evaluation results, and generated figures are intentionally ignored by git. If you want to distribute pretrained models, upload them as release assets or to an external archive and document the download path here.
+Model checkpoints, training logs, raw evaluation results, and temporary generated figures are intentionally ignored by git. The curated figures in `figures/` are tracked for documentation. If you want to distribute pretrained models, upload them as release assets or to an external archive and document the download path here.
 
 ## License
 
