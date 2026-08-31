@@ -1,8 +1,8 @@
-# Communication-Aware CAV Eco-Driving
+# Flexible Hybrid-Action CAV Eco-Driving
 
 This repository contains the reproducible code for SUMO-based connected and automated vehicle (CAV) eco-driving experiments in mixed traffic. It includes the reinforcement-learning agents, SUMO environments, training and evaluation entry points, and scenario configuration files.
 
-The repository is intentionally code-focused. It does not include manuscript source files, raw training logs, raw evaluation outputs, or model checkpoints. A small set of representative result figures is included in `figures/` to make the experiment behavior easier to understand.
+The repository is intentionally code-focused and does not include manuscript source files, raw evaluation outputs, FCD traces, or intermediate checkpoints. It does include the final checkpoints and episode-level training CSV files used for the paper experiments, together with a small set of representative figures.
 
 ## Contents
 
@@ -22,6 +22,7 @@ evaluate_comm_sensitivity.py  Communication-capacity evaluation
 config.yaml              Hydra configuration
 environment.yaml         Conda environment specification
 figures/                 Representative training, evaluation, and trajectory results
+artifacts/training_runs/ Final checkpoints and episode-level training CSV files
 ```
 
 ## Representative Results
@@ -32,7 +33,7 @@ The main comparison considers three learned control settings:
 - `CAV-V2I`: local perception plus signal timing information.
 - `CAV-V2X`: local perception, signal timing, and neighboring-CAV communication.
 
-Across the evaluated scenarios, the communication-aware `CAV-V2X` policy gives the most balanced improvement among the learned policies. Averaged over the tested CAV penetration rates, its mixed-traffic performance improves relative to the SUMO baseline by approximately `0.7%` in travel-time saving, `56.8%` in stop-time saving, `1.1%` in speed improvement, `16.5%` in fuel saving, `37.5%` in jerk reduction, and `65.7%` in TET-rate reduction.
+Across 50 matched evaluation scenarios, the `CAV-V2X` policy gives the most balanced improvement among the learned policies. Averaged over the tested CAV penetration rates, its mixed-traffic performance improves relative to the SUMO baseline by `0.74%` in travel time, `56.83%` in stop time, `1.15%` in speed, `16.52%` in fuel consumption, `37.01%` in jerk, and `65.50%` in TET rate.
 
 Training reward comparison:
 
@@ -137,6 +138,31 @@ The convenience script runs the same core settings:
 bash train.sh
 ```
 
+## Released Training Artifacts
+
+The curated artifacts follow this layout:
+
+```text
+artifacts/training_runs/<experiment>/
+├── models/final.pt    Final policy checkpoint
+└── train.csv          Episode-level training metrics (400 episodes)
+```
+
+The released experiments are:
+
+| Experiment | Role in the paper |
+|---|---|
+| `av_control` | Local-perception AV policy |
+| `cav_control_v2i` | CAV policy with V2I signal information |
+| `cav_control` | Proposed Hybrid SAC CAV-V2X policy |
+| `cav_control_sac_continuous` | Continuous-action SAC baseline |
+| `ppo_control` | Hybrid-action PPO baseline |
+| `dqn_control` | 27-action DQN baseline |
+| `sycamore_scratch_s1` | Sycamore scenario trained from scratch |
+| `sycamore_pretrained_s1` | Sycamore scenario initialized from the pretrained CAV-V2X policy |
+
+Experiments that alter only execution-time information or action availability reuse `cav_control/models/final.pt`. This includes the longitudinal/lane-changing branch ablation, penetration-rate evaluation, and the `K=0,1,2,4,6,8` V2V-token sensitivity study. See [`artifacts/README.md`](artifacts/README.md) for file hashes and experiment mapping.
+
 ## Evaluation
 
 Evaluate SUMO and GLOSA baselines:
@@ -150,7 +176,7 @@ Evaluate a trained RL checkpoint:
 
 ```bash
 python evaluate.py \
-  checkpoint=logs/sumo-intersection/1/cav_control/models/final.pt \
+  checkpoint=artifacts/training_runs/cav_control/models/final.pt \
   exp_name=cav_control \
   attention=true \
   communication=true
@@ -183,14 +209,14 @@ bash scripts/train_sycamore_pm2026.sh
 Run paired scratch/pretrained experiments:
 
 ```bash
-PRETRAINED_CHECKPOINT=logs/sumo-intersection/1/cav_control/models/final.pt \
+PRETRAINED_CHECKPOINT=artifacts/training_runs/cav_control/models/final.pt \
 bash scripts/train_sycamore_pm2026_scratch_vs_pretrained.sh
 ```
 
 Visualize a trained policy in SUMO-GUI:
 
 ```bash
-CHECKPOINT=logs/sumo-intersection/1/cav_control/models/final.pt \
+CHECKPOINT=artifacts/training_runs/cav_control/models/final.pt \
 bash scripts/visualize_sycamore_v2x.sh
 ```
 
@@ -219,7 +245,7 @@ python evaluate.py checkpoint=<path/to/final.pt> \
 
 ## Large Files
 
-Model checkpoints, training logs, raw evaluation results, and temporary generated figures are intentionally ignored by git. The curated figures in `figures/` are tracked for documentation. If you want to distribute pretrained models, upload them as release assets or to an external archive and document the download path here.
+Only the eight curated `final.pt` checkpoints and their `train.csv` files are tracked. Intermediate checkpoints, runtime `logs/`, raw evaluation results, FCD XML files, videos, and temporary figures remain ignored. The complete curated artifact set is approximately 16 MB and does not require Git LFS.
 
 ## License
 

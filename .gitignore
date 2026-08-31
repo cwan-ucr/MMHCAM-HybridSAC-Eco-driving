@@ -29,6 +29,9 @@ wandb/
 *.ckpt
 *.onnx
 
+# Curated final checkpoints released for paper reproducibility
+!artifacts/training_runs/*/models/final.pt
+
 # Generated media and temporary plots
 *.mp4
 *.avi
