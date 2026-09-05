@@ -2,7 +2,7 @@
 
 This repository contains the reproducible code for SUMO-based connected and automated vehicle (CAV) eco-driving experiments in mixed traffic. It includes the reinforcement-learning agents, SUMO environments, training and evaluation entry points, and scenario configuration files.
 
-The repository is intentionally code-focused and does not include manuscript source files, raw evaluation outputs, FCD traces, or intermediate checkpoints. It does include the final checkpoints and episode-level training CSV files used for the paper experiments, together with a small set of representative figures.
+The repository is intentionally code-focused and does not include manuscript source files, raw evaluation outputs, FCD traces, or intermediate checkpoints. It includes the final checkpoints and episode-level training CSV files used for the paper experiments, together with representative result figures.
 
 ## Contents
 
@@ -33,7 +33,13 @@ The main comparison considers three learned control settings:
 - `CAV-V2I`: local perception plus signal timing information.
 - `CAV-V2X`: local perception, signal timing, and neighboring-CAV communication.
 
-Across 50 matched evaluation scenarios, the `CAV-V2X` policy gives the most balanced improvement among the learned policies. Averaged over the tested CAV penetration rates, its mixed-traffic performance improves relative to the SUMO baseline by `0.74%` in travel time, `56.83%` in stop time, `1.15%` in speed, `16.52%` in fuel consumption, `37.01%` in jerk, and `65.50%` in TET rate.
+Across five penetration rates and 100 matched evaluation runs per policy, the `CAV-V2X` policy gives the most balanced improvement among the learned policies. Averaged after run-level matching with the SUMO baseline, its mixed-traffic performance improves by `1.10%` in travel time, `56.21%` in stop time, `1.59%` in speed, `16.69%` in fuel consumption, `36.50%` in jerk, and `64.99%` in TET rate.
+
+Algorithm training comparison:
+
+![Algorithm training reward](figures/algorithm_training_reward.png)
+
+![Algorithm training metrics](figures/algorithm_training_metrics.png)
 
 Training reward comparison:
 
@@ -55,9 +61,21 @@ Penetration sensitivity:
 
 ![Penetration sensitivity](figures/penetration_sensitivity.png)
 
+Hybrid-action branch ablation:
+
+![Hybrid-action ablation](figures/hybrid_action_ablation.png)
+
+Available V2V-context sensitivity:
+
+![Communication capacity sensitivity](figures/communication_capacity_heatmap.png)
+
 The real-parameter Sycamore/Central scenario is used to test adaptation from a pretrained model. Pretraining improves early convergence and stabilizes several performance metrics compared with training from scratch.
 
 ![Sycamore generalization training](figures/sycamore_generalization_training.png)
+
+Sycamore evaluation savings:
+
+![Sycamore evaluation savings](figures/sycamore_evaluation_savings.png)
 
 Pretrained-policy trajectories under different penetration rates:
 
@@ -161,7 +179,7 @@ The released experiments are:
 | `sycamore_scratch_s1` | Sycamore scenario trained from scratch |
 | `sycamore_pretrained_s1` | Sycamore scenario initialized from the pretrained CAV-V2X policy |
 
-Experiments that alter only execution-time information or action availability reuse `cav_control/models/final.pt`. This includes the longitudinal/lane-changing branch ablation, penetration-rate evaluation, and the `K=0,1,2,4,6,8` V2V-token sensitivity study. See [`artifacts/README.md`](artifacts/README.md) for file hashes and experiment mapping.
+The penetration-rate and V2V-context sensitivity evaluations reuse `cav_control/models/final.pt`. The separately trained longitudinal-only and lane-changing-only checkpoints used for the action-branch ablation were unavailable in the local release source and are therefore not included; only their result figure is released. See [`artifacts/README.md`](artifacts/README.md) for file hashes, experiment mapping, and this limitation.
 
 ## Evaluation
 
@@ -245,7 +263,7 @@ python evaluate.py checkpoint=<path/to/final.pt> \
 
 ## Large Files
 
-Only the eight curated `final.pt` checkpoints and their `train.csv` files are tracked. Intermediate checkpoints, runtime `logs/`, raw evaluation results, FCD XML files, videos, and temporary figures remain ignored. The complete curated artifact set is approximately 16 MB and does not require Git LFS.
+Eight curated `final.pt` checkpoints, their `train.csv` files, and representative paper result figures are tracked. Intermediate checkpoints, runtime `logs/`, raw evaluation results, FCD XML files, videos, and temporary figures remain ignored. The tracked model files are small enough that Git LFS is not required.
 
 ## License
 

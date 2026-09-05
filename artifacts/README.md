@@ -15,7 +15,7 @@ This directory contains the final policy checkpoints and episode-level training 
 | `sycamore_scratch_s1` | Hybrid SAC trained from scratch | Data-informed scenario transfer comparison |
 | `sycamore_pretrained_s1` | Hybrid SAC initialized from `cav_control` | Data-informed scenario transfer comparison |
 
-The action-branch ablation and the V2V-token sensitivity experiment do not have separate trained checkpoints. They evaluate the unchanged `cav_control/models/final.pt` policy while restricting available actions or masking context tokens at execution time.
+The penetration-rate and V2V-context sensitivity experiments evaluate the unchanged `cav_control/models/final.pt` policy while changing the evaluation scenario or masking context tokens. The separately trained longitudinal-only and lane-changing-only checkpoints used for the action-branch ablation were not available in the local release source. Those two policies cannot currently be re-evaluated bit-for-bit from the released checkpoints.
 
 ## File Layout
 
@@ -47,4 +47,3 @@ Checkpoints are PyTorch dictionaries with a top-level `model` state dictionary. 
 | `training_runs/sycamore_pretrained_s1/train.csv` | `050d6b023ffcd6346c7f3c2454367919da614ef9f5744357c071091e8554807d` |
 | `training_runs/sycamore_scratch_s1/models/final.pt` | `61d5bcc026e930058b78a6d40a7486117649072273aa87c587cf069f0ce8d304` |
 | `training_runs/sycamore_scratch_s1/train.csv` | `0e423f1e8a5b4da8107017bb506b856459073c8c85ac17297f20e35f1b63111d` |
-
